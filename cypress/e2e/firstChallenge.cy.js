@@ -55,7 +55,7 @@ describe('User Registration Test', () => {
         registerPage.elements.errorMessage().contains('O campo senha deve ter pelo menos 6 dígitos');
     })
 
-    it.only('User registered successfully', () => {
+    it('User registered successfully', () => {
         const name = faker.person.fullName();
         registerPage.elements.nameField().type(name);
         registerPage.elements.emailField().type(randomEmail);
