@@ -1,71 +1,68 @@
 /// <reference types="cypress" />
+
 import { faker } from '@faker-js/faker';
+import homePage from '../support/pages/home_page';
+import register_page from '../support/pages/register_page'
 const userData = require('../fixtures/firstChallenge.json')
 
 describe('User Registration Test', () => {
-
-    const userName = 'Fernando Braga'
-    const userEmail = 'fernando@gmail.com'
-    const userPassword = '123456'
+    const registerPage = new register_page();
     const nameUsingFakejsToExemple = faker.name.fullName()
-
+    const randomName = faker.person.fullName();
+    const randomEmail = faker.internet.email();
     beforeEach('Accessing register page', () => {
 
         // ACCESING THE REGISTRATION SCREEN
-        cy.accessRegisterPage();
+        homePage.acessRegisterPage();
         // ACCESING THE REGISTRATION SCREEN
     })
 
-    it.only('Validate empty name field', () => {
-        cy.get('#user').should('be.visible');
-        cy.get('#user').click();
-        cy.saveRegister();
-        cy.checkMessage('O campo nome deve ser prenchido');
+    it('Validate empty name field', () => {
+        registerPage.elements.passwordField().click();
+        registerPage.elements.emailField().type(randomEmail);
+        registerPage.elements.passwordField().type('123456');
+        registerPage.elements.registerBtn().click();
+        registerPage.elements.errorMessage().contains('O campo nome deve ser prenchido');
     });
 
     it('Validate empty email field', () => {
-        cy.get('#user').should('be.visible');
-        cy.fillName(userData.name).click();
-        cy.get('#email').click();
-        cy.saveRegister();
-        cy.checkMessage('O campo e-mail deve ser prenchido corretamente');
+        registerPage.elements.nameField().type(randomName);
+        registerPage.elements.passwordField().type('123456');
+        registerPage.elements.registerBtn().click();
+        registerPage.elements.errorMessage().contains('O campo e-mail deve ser prenchido corretamente');
     });
 
     it('Validate invalid email field', () => {
-        cy.get('#user').should('be.visible');
-        cy.fillName(userData.name).click();
-        cy.get('#email').click().type(userData.invalidEmail);
-        cy.saveRegister();
-        cy.checkMessage('O campo e-mail deve ser prenchido corretamente');
+        registerPage.elements.nameField().type(randomName);
+        registerPage.elements.emailField().type('invalid email');
+        registerPage.elements.passwordField().type('123456');
+        registerPage.elements.registerBtn().click();
+        registerPage.elements.errorMessage().contains('O campo e-mail deve ser prenchido corretamente');
     });
 
     it('Validate empty password field', () => {
-        cy.get('#user').should('be.visible');
-        cy.fillName(userData.name).click();
-        cy.fillEmail(userData.email).click();
-        cy.get('#password').click();
-        cy.saveRegister();
-        cy.checkMessage('O campo senha deve ter pelo menos 6 dígitos');
+        registerPage.elements.nameField().type(randomName);
+        registerPage.elements.emailField().type(randomEmail);
+        registerPage.elements.registerBtn().click();
+        registerPage.elements.errorMessage().contains('O campo senha deve ter pelo menos 6 dígitos');
     });
 
     it('Validate invalid password', () => {
-        cy.get('#user').should('be.visible');
-        cy.fillName(userData.name).click();
-        cy.fillEmail(userData.email).click();
-        cy.get('#password').click().type(userData.invalidPassword);
-        cy.saveRegister();
-        cy.checkMessage('O campo senha deve ter pelo menos 6 dígitos');
+        registerPage.elements.nameField().type(randomName);
+        registerPage.elements.emailField().type(randomEmail);
+        registerPage.elements.passwordField().type('1');
+        registerPage.elements.registerBtn().click();
+        registerPage.elements.errorMessage().contains('O campo senha deve ter pelo menos 6 dígitos');
     })
 
     it.only('User registered successfully', () => {
-        cy.get('#user').should('be.visible');
-        cy.get('#user').click().type(nameUsingFakejsToExemple);
-        cy.fillEmail(userData.email).click();
-        cy.fillPassword(userData.password).click();
-        cy.saveRegister();
-        cy.successfullyRegistered();
-        cy.get('#swal2-html-container').should('have.text', `Bem-vindo ${nameUsingFakejsToExemple}`);
-        cy.get('.swal2-confirm').click();
+        const name = faker.person.fullName();
+        registerPage.elements.nameField().type(name);
+        registerPage.elements.emailField().type(randomEmail);
+        registerPage.elements.passwordField().type('123456');
+        registerPage.elements.registerBtn().click();
+        registerPage.elements.registeredUserModal().should('be.visible');
+        registerPage.elements.okBtn().click();
 
     });
 });
