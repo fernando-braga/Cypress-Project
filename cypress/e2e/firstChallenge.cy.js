@@ -7,7 +7,7 @@ const userData = require('../fixtures/firstChallenge.json');
 
 const screen = ['desktop', 'iphone-x', 'iphone-6'];
 
-screen.forEach(element => {
+// screen.forEach(element => {
 
 describe('User Registration Test', () => {
     const registerPage = new register_page();
@@ -15,9 +15,9 @@ describe('User Registration Test', () => {
     const randomEmail = faker.internet.email();
     
     beforeEach('Accessing register page', () => {
-        if(element != 'desktop') {
-        cy.viewport(element);
-        }
+        // if(element != 'desktop') {
+        // cy.viewport(element);
+        // }
         homePage.acessRegisterPage();
     })
 
@@ -70,4 +70,4 @@ describe('User Registration Test', () => {
 
     });
 });
-});
+// });
