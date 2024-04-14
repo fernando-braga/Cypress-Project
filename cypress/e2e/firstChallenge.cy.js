@@ -2,19 +2,23 @@
 
 import { faker } from '@faker-js/faker';
 import homePage from '../support/pages/home_page';
-import register_page from '../support/pages/register_page'
-const userData = require('../fixtures/firstChallenge.json')
+import register_page from '../support/pages/register_page';
+const userData = require('../fixtures/firstChallenge.json');
+
+const screen = ['desktop', 'iphone-x', 'iphone-6'];
+
+// screen.forEach(element => {
 
 describe('User Registration Test', () => {
     const registerPage = new register_page();
-    const nameUsingFakejsToExemple = faker.name.fullName()
     const randomName = faker.person.fullName();
     const randomEmail = faker.internet.email();
+    
     beforeEach('Accessing register page', () => {
-
-        // ACCESING THE REGISTRATION SCREEN
+        // if(element != 'desktop') {
+        // cy.viewport(element);
+        // }
         homePage.acessRegisterPage();
-        // ACCESING THE REGISTRATION SCREEN
     })
 
     it('Validate empty name field', () => {
@@ -66,3 +70,4 @@ describe('User Registration Test', () => {
 
     });
 });
+// });
